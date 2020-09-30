@@ -10,4 +10,15 @@ class AppError extends Error {
   }
 }
 
-module.exports = AppError;
+const errorHandler = (err, req, res, next) => {
+  // let error = {...err}
+  // error.message = err.message;
+  res.status(err.statusCode || 500).json({
+    sucess: false,
+    error: err.message || 'Server Error'
+  });
+};
+module.exports = {
+  AppError,
+  errorHandler
+};

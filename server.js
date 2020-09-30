@@ -7,8 +7,7 @@ const multer = require('multer');
 const adapter = new FileSync('db.json');
 const db = low(adapter);
 const uuid = require('uuid').v4;
-const AppError = require('./config/appError');
-
+const { AppError, errorHandler } = require('./config/appError');
 
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -31,12 +30,18 @@ app.post('/upload', (req, res, next) => {
     fileFilter: fileFileter
   }).array('image', 2);
 
-  upload(req, res, function(err) {
+  upload(req, res, function (err) {
     if (err instanceof multer.MulterError) {
-      return new AppError(`Error eccoured while uploading: ${err}`, 401);
+      return next(
+        new AppError(`Error eccoured while uploading: ${err.message}`, 401)
+      );
     } else if (err) {
-      return new AppError(`${err}`, 401);
-    } else {
+      return next(new AppError(`${err.message}`, 401));
+    } else if (!req.files)
+      return next(
+        new AppError(`Error You have to upload at least one image`, 401)
+      );
+    else {
       const result = req.files.map(file => {
         const id = uuid();
         return {
@@ -53,15 +58,17 @@ app.post('/upload', (req, res, next) => {
   });
 });
 
-app.get('/:id', (req, res) => {
+app.get('/:id', (req, res, next) => {
   const { id } = req.params;
   const imageData = db.get(`images[${id}]`).value();
   if (!imageData) {
-    return new AppError('Image is not found', 400);
+    return next(new AppError('Image is not found', 400));
   } else {
-    res.json(imageData);  
+    res.json(imageData);
   }
 });
+
+app.use(errorHandler);
 
 // start the app
 const port = 3000;
