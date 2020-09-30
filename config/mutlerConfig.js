@@ -1,5 +1,6 @@
 const multer = require('multer');
 const cloudinaryStorage = require('./cloudinary-storage-multer');
+const AppError = require('./appError');
 
 const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -19,10 +20,7 @@ const fileFileter = (req, file, cb) => {
   ) {
     cb(null, true);
   } else {
-    cb({
-      success: false,
-      msg: `File type isn't supported`
-    });
+    cb(new AppError('Not an image! Please upload only images.', 400), false);
   }
 };
 
