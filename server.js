@@ -9,6 +9,13 @@ const db = low(adapter);
 const uuid = require('uuid').v4;
 const AppError = require('./config/appError');
 
+
+process.on('uncaughtException', err => {
+  console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  process.exit(1);
+});
+
 db.defaults({ images: {} }).write();
 
 // create express app
@@ -60,3 +67,11 @@ app.get('/:id', (req, res) => {
 const port = 3000;
 
 app.listen(port, () => console.log(`App is listening on port ${port}.`));
+
+process.on('unhandledRejection', err => {
+  console.log('UNHANDLED REJECTION! 💥 Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
+});
