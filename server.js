@@ -17,7 +17,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.post('/upload', imageController.uploadImages);
+app.post('/upload', imageController.localProvider, imageController.cloudinaryProvider);
 
 app.get('/:id', imageController.getImages);
 

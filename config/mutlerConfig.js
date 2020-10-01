@@ -44,5 +44,5 @@ const loadBalance = loadBalanceWrapper();
 
 module.exports = {
   fileFileter,
-  loadBalance
+  diskStorage
 };

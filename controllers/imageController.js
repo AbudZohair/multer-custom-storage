@@ -2,15 +2,12 @@ const multer = require('multer');
 const { fileFileter, loadBalance } = require('../config/mutlerConfig');
 const { db } = require('./dbController');
 const { AppError, errorHandler } = require('../utils/appError');
+const catchAsync = require('../utils/catchAsync')
+const cloudinaryStorage = require('../config/cloudinary-storage-multer');
+const { diskStorage } = require('multer');
 
-
-exports.uploadImages = (req, res, next) => {
-  const upload = multer({
-    storage: loadBalance(),
-    fileFilter: fileFileter
-  }).array('image', 2);
-
-  upload(req, res, function (err) {
+const uploader = catchAsync(() => {
+  (req, res, function (err) {
     if (err instanceof multer.MulterError) {
       return next(
         new AppError(`Error eccoured while uploading: ${err.message}`, 401)
@@ -36,6 +33,24 @@ exports.uploadImages = (req, res, next) => {
       res.json(result);
     }
   });
+});
+
+exports.localProvider = (req, res, next) => {
+  const upload = multer({
+    storage: diskStorage,
+    fileFilter: fileFileter
+  }).array('image', 2);
+
+  upload(uploader());
+};
+
+exports.cloudinaryProvider = (req, res, next) => {
+  const upload = multer({
+    storage: cloudinaryStorage,
+    fileFilter: fileFileter
+  }).array('image', 2);
+
+  upload(uploader());
 };
 
 exports.getImages = (req, res, next) => {
