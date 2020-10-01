@@ -2,7 +2,7 @@
 
 - upload the image on two providers and return the data from the first response ( faster response ).
 - we can easily add more providers to upload images
-- deploying back end we can decide upload strategy (provider selection)
+- we can decide upload strategy (provider selection)
    - upload on multibe providers
    - upload on one provider
    - upload on given provider
@@ -24,9 +24,9 @@
 
 #### Endpoints
 
-**upload image**
+**upload image[s]**
 ----
-    return json data a bout the uploaded image
+    return json data a bout the uploaded image[s]
 
 * **URL**
 
