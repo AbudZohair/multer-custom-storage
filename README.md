@@ -4,9 +4,11 @@
 #### How to run the project
 
 - create `.env` file in the root directory and add your
- ``` CLOUDINARY_CLOUD_NAME=xxxxxxxxxxx
-     CLOUDINARY_API_KEY=xxxxxxxxxxxxxxxxx
-     CLOUDINARY_API_SECRET=xxxxxxxxxxxxxxx
+
+ ```
+ CLOUDINARY_CLOUD_NAME=xxxxxxxxxxx
+ CLOUDINARY_API_KEY=xxxxxxxxxxxxxxxxx
+ CLOUDINARY_API_SECRET=xxxxxxxxxxxxxxx
 ```
 
 - create a folder named `images` so that we store the images locally
