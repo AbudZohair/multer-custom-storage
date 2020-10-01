@@ -1,6 +1,6 @@
 const multer = require('multer');
 const cloudinaryStorage = require('./cloudinary-storage-multer');
-const { AppError } = require('./appError');
+const { AppError } = require('../utils/appError');
 
 const diskStorage = multer.diskStorage({
   destination: (req, file, cb) => {
